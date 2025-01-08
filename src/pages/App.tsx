@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import { getAuth, onAuthStateChanged, signOut, User } from 'firebase/auth'
-import guitarImage from '../assets/classical-guitar.jpg'
 import Metronome from './Metronome'
 import Login from './Login'
 import Signup from './Signup'
 import Profile from './Profile'
+import HomePage from './HomePage'
 import { app } from '../firebase/config'
 import '../styles/App.css'
 
@@ -42,35 +42,6 @@ function App() {
     }
   };
 
-  const HomePage = () => (
-    <main>
-      <section className="hero-section" style={{ opacity: scrollOpacity }}>
-        <div className="hero-content">
-          <h1>Master the Guitar</h1>
-          <p>Your journey to becoming a guitarist starts here</p>
-          <button className="cta-button">Start Practice</button>
-        </div>
-      </section>
-
-      <section className="features-section">
-        <h2>Why Choose GuitarStudio?</h2>
-        <div className="features-grid">
-          <div className="feature-card">
-            <h3>Structured Learning</h3>
-            <p>Follow our carefully crafted curriculum</p>
-          </div>
-          <div className="feature-card">
-            <h3>Practice Tools</h3>
-            <p>Access to professional metronome</p>
-          </div>
-          <div className="feature-card">
-            <h3>Track Progress</h3>
-            <p>Monitor your improvement over time</p>
-          </div>
-        </div>
-      </section>
-    </main>
-  );
 
   return (
     <Router>
@@ -105,7 +76,7 @@ function App() {
         </nav>
 
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<HomePage scrollOpacity={scrollOpacity} />} />
           <Route path="/tools/metronome" element={<Metronome />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
