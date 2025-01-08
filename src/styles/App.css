@@ -78,7 +78,7 @@ main {
   align-items: center;
   padding: 6rem 2rem 2rem;
   position: relative;
-  background: url('./assets/classical-guitar.jpg') no-repeat center center fixed;
+  background: url('../assets/classical-guitar.jpg') no-repeat center center fixed;
   background-size: cover;
   width: 100vw;
   margin-left: 50%;
@@ -296,3 +296,26 @@ main {
   color: var(--accent-color);
   font-weight: 600;
 }
+
+.user-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.signout-nav-btn {
+  background-color: transparent;
+  color: var(--accent-color);
+  border: 1px solid var(--accent-color);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.signout-nav-btn:hover {
+  background-color: var(--accent-color);
+  color: white;
+} 

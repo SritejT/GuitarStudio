@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import metronomeIcon from '../assets/metronome-icon.png'
-import './Metronome.css'
+import '../styles/Metronome.css'
 
 type TimeSignature = '4/4' | '3/4' | '2/4'
 
