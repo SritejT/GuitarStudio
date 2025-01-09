@@ -1,0 +1,237 @@
+.recordings-container {
+  min-height: calc(100vh - 64px);
+  padding: 2rem;
+  margin-top: 64px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  width: 100vw;
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+
+.recordings-content {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.recordings-content h2 {
+  color: var(--primary-color);
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.recording-controls {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.record-button {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  background-color: var(--accent-color);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.record-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.record-button.recording {
+  background-color: #dc3545;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.current-recording {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.current-recording h3 {
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.recordings-list {
+  margin-top: 2rem;
+}
+
+.recordings-list h3 {
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.recording-item {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.recording-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.recording-name {
+  font-weight: 500;
+  color: var(--primary-color);
+}
+
+.recording-date {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+audio {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.recording-name-input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.modal-buttons {
+  margin-top: 20px;
+}
+
+.save-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.save-button:hover {
+  background-color: #45a049;
+}
+
+.recording-actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.analyze-button {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.analyze-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.analyze-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.analyze-button.analyzing {
+  position: relative;
+  padding-right: 32px;
+}
+
+.analyze-button.analyzing::after {
+  content: '';
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  border: 2px solid #fff;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: translateY(-50%) rotate(360deg);
+  }
+}
+
+.feedback-container {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f0f7ff;
+  border-radius: 4px;
+  border-left: 4px solid var(--primary-color);
+}
+
+.feedback-container h4 {
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.feedback-container p {
+  color: #333;
+  line-height: 1.5;
+  margin: 0;
+  font-size: 0.95rem;
+} 

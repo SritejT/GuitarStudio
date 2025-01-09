@@ -6,6 +6,7 @@ import Login from './Login'
 import Signup from './Signup'
 import Profile from './Profile'
 import HomePage from './HomePage'
+import Recordings from './Recordings'
 import { app } from '../firebase/config'
 import '../styles/App.css'
 
@@ -59,6 +60,7 @@ function App() {
               <a href="#" className="dropdown-trigger">Practice Tools</a>
               <div className="dropdown-menu">
                 <Link to="/tools/metronome">Metronome</Link>
+                {user && <Link to="/recordings">Recordings</Link>}
               </div>
             </div>
             {user ? (
@@ -81,6 +83,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/recordings" element={<Recordings />} />
         </Routes>
       </div>
     </Router>
