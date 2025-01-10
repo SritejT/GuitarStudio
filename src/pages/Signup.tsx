@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { createUserWithEmailAndPassword, updateProfile, getAuth } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { app } from '../firebase/config';
@@ -13,6 +13,13 @@ const Signup = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.title = 'GuitarStudio | Sign Up';
+    return () => {
+      document.title = 'GuitarStudio';
+    };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

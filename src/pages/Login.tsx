@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { signInWithEmailAndPassword, getAuth } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { app } from '../firebase/config';
 import '../styles/Auth.css';
 
@@ -11,6 +11,13 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.title = 'GuitarStudio | Login';
+    return () => {
+      document.title = 'GuitarStudio';
+    };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,6 +60,9 @@ const Login = () => {
           </div>
           <button type="submit" className="auth-button">Login</button>
         </form>
+        <div className="auth-switch">
+          Don't have an account? <Link to="/signup">Sign up here</Link>
+        </div>
       </div>
     </div>
   );

@@ -59,12 +59,28 @@ function Metronome() {
     const interval = 60000 / bpm // Convert BPM to milliseconds
     let beat = 0
     const beatsPerBar = getBeatsPerBar()
-    const degreesPerBeat = 360 / beatsPerBar
     
     intervalRef.current = window.setInterval(() => {
       beat = (beat + 1) % beatsPerBar
       setCurrentBeat(beat)
-      setRotation(beat * degreesPerBeat)
+      
+      // Calculate rotation based on time signature
+      let newRotation;
+      switch (timeSignature) {
+        case '2/4':
+          // No rotation for 2/4 time, we'll use scaleY instead
+          newRotation = 0;
+          break;
+        case '3/4':
+          newRotation = beat * 120;
+          break;
+        case '4/4':
+          newRotation = beat * 90;
+          break;
+        default:
+          newRotation = 0;
+      }
+      setRotation(newRotation)
       playClick(beat)
     }, interval)
   }
@@ -102,7 +118,14 @@ function Metronome() {
               src={metronomeIcon} 
               alt="Metronome" 
               className={`metronome-icon ${currentBeat === 0 ? 'accent-beat' : ''}`}
-              style={{ transform: `rotate(${rotation}deg)` }}
+              style={{ 
+                transform: timeSignature === '2/4' 
+                  ? `scaleY(${currentBeat === 0 ? 1 : -1})` 
+                  : `rotate(${rotation}deg)`,
+                transition: timeSignature === '2/4' 
+                  ? 'transform 0.2s cubic-bezier(0.4, 0.0, 0.2, 1)' 
+                  : 'transform 0.2s ease-in-out'
+              }}
             />
           </div>
           

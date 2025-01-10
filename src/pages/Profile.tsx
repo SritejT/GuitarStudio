@@ -11,6 +11,13 @@ const Profile = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    document.title = 'GuitarStudio | Profile';
+    return () => {
+      document.title = 'GuitarStudio';
+    };
+  }, []);
+
+  useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
