@@ -34,6 +34,10 @@ dist-ssr
 firebase-debug.log*
 firebase-debug.*.log*
 .runtimeconfig.json
+/src/firebase/config.ts
+
+# Configuration files
+
 
 # Build files
 /build

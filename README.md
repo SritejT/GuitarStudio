@@ -33,5 +33,6 @@ GuitarStudio is a web application designed to help guitarists practice more effe
 - MediaRecorder API for audio recording
 
 Visit the live application at: https://guitarstudio-bbd18.web.app
-Happy practicing!
+
+### Happy practicing!
 
