@@ -1,50 +1,37 @@
-# React + TypeScript + Vite
+# GuitarStudio 🎸
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+GuitarStudio is a web application designed to help guitarists practice more effectively. It combines a professional metronome with recording capabilities and AI-powered feedback to create a comprehensive practice environment.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Professional Metronome
+- Adjustable BPM (Beats Per Minute)
+- Support for different time signatures (2/4, 3/4, 4/4)
+- Visual beat indicator with first-beat emphasis
+- Smooth animations and intuitive controls
 
-## Expanding the ESLint configuration
+### Recording Studio
+- High-quality WAV audio recording
+- Personal library of practice recordings
+- Ability to name and organize recordings
+- Playback functionality
+- Easy deletion of old recordings
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### AI Analysis
+- AI-powered feedback on your guitar playing
+- Detailed analysis of technique and performance
+- Constructive suggestions for improvement
+- Integration with OpenAI's audio analysis model
 
-- Configure the top-level `parserOptions` property like this:
+## Technologies Used
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- React + TypeScript
+- Vite for build tooling
+- Firebase (Authentication, Storage, Functions, Hosting)
+- OpenAI API for audio analysis
+- Web Audio API for metronome functionality
+- MediaRecorder API for audio recording
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+Visit the live application at: https://guitarstudio-bbd18.web.app
+Happy practicing!
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```

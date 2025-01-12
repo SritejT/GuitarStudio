@@ -62,12 +62,10 @@ export const recordingService = {
     return await getDownloadURL(audioRef);
   },
 
-  async getAudioBytes(storagePath: string | null): Promise<Uint8Array> {
-    if (!storagePath) {
-      throw new Error('Invalid storage path');
-    }
+  async getAudioBytes(storagePath: string): Promise<Uint8Array> {
     const audioRef = ref(storage, storagePath);
-    return await getBytes(audioRef);
+    const arrayBuffer = await getBytes(audioRef);
+    return new Uint8Array(arrayBuffer);
   },
 
   async updateFeedback(recordingId: string, feedback: string): Promise<void> {

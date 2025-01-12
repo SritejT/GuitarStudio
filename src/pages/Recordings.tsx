@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { getAuth } from 'firebase/auth';
-import OpenAI from 'openai';
 import { register } from 'extendable-media-recorder';
 import { connect } from 'extendable-media-recorder-wav-encoder';
 import RecordingItem from '../components/recordings/RecordingItem';
@@ -18,12 +17,9 @@ const Recordings = () => {
   const [pendingRecording, setPendingRecording] = useState<{ blob: Blob, url: string } | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState<{ [key: string]: boolean }>({});
   const [audioUrls, setAudioUrls] = useState<{ [key: string]: string }>({});
+  const [isLoading, setIsLoading] = useState(true);
   
   const auth = getAuth();
-  const openai = new OpenAI({
-    apiKey: import.meta.env.VITE_OPENAI_API_KEY || '',
-    dangerouslyAllowBrowser: true
-  });
 
   useEffect(() => {
     document.title = 'GuitarStudio | Recordings';
@@ -32,6 +28,30 @@ const Recordings = () => {
     };
   }, []);
 
+  const loadRecordings = async () => {
+    if (!auth.currentUser) return;
+    try {
+      setIsLoading(true);
+      const recordingsList = await recordingService.loadRecordings(auth.currentUser.uid);
+      setRecordings(recordingsList);
+    } catch (error) {
+      console.error('Error loading recordings:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const initializeRecorder = async () => {
+      await register(await connect());
+    };
+    initializeRecorder().catch(console.error);
+    
+    if (auth.currentUser) {
+      loadRecordings();
+    }
+  }, [auth.currentUser]);
+
   const handleRecordingComplete = (blob: Blob, url: string) => {
     setCurrentRecording(url);
     setPendingRecording({ blob, url });
@@ -39,20 +59,6 @@ const Recordings = () => {
   };
 
   const { isRecording, startRecording, stopRecording } = useRecorder(handleRecordingComplete);
-
-  useEffect(() => {
-    if (!import.meta.env.VITE_OPENAI_API_KEY) {
-      console.error('OpenAI API key is not configured');
-    }
-  }, []);
-
-  useEffect(() => {
-    const initializeRecorder = async () => {
-      await register(await connect());
-    };
-    initializeRecorder().catch(console.error);
-    loadRecordings();
-  }, []);
 
   useEffect(() => {
     const loadAudioUrls = async () => {
@@ -70,7 +76,9 @@ const Recordings = () => {
       setAudioUrls(prev => ({ ...prev, ...urls }));
     };
 
-    loadAudioUrls();
+    if (recordings.length > 0) {
+      loadAudioUrls();
+    }
 
     return () => {
       Object.values(audioUrls).forEach(url => {
@@ -78,16 +86,6 @@ const Recordings = () => {
       });
     };
   }, [recordings]);
-
-  const loadRecordings = async () => {
-    if (!auth.currentUser) return;
-    try {
-      const recordingsList = await recordingService.loadRecordings(auth.currentUser.uid);
-      setRecordings(recordingsList);
-    } catch (error) {
-      console.error('Error loading recordings:', error);
-    }
-  };
 
   const handleSaveRecording = async () => {
     if (!pendingRecording || !auth.currentUser) return;
@@ -115,30 +113,28 @@ const Recordings = () => {
 
     try {
       const audioBytes = await recordingService.getAudioBytes(storagePath);
+      const uint8Array = new Uint8Array(audioBytes);
       const base64str = btoa(
-        new Uint8Array(audioBytes).reduce((data, byte) => data + String.fromCharCode(byte), '')
+        uint8Array.reduce((data, byte) => data + String.fromCharCode(byte), '')
       );
       
-      const completion = await openai.chat.completions.create({
-        model: "gpt-4o-audio-preview-2024-12-17",
-        modalities: ["text"],
-        messages: [
-          {
-            role: "system",
-            content: "You are an expert guitar teacher. Analyze the transcribed audio of a guitar performance and provide constructive feedback. If you hear clapping or non-guitar sounds, please acknowledge that in your response."
-          },
-          {
-            role: "user",
-            content: [
-              {type: "input_audio", input_audio: {data: base64str, format: "wav"}}
-            ]
-          }
-        ]
+      const response = await fetch('https://us-central1-guitarstudio-bbd18.cloudfunctions.net/analyzeAudio', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          audioData: base64str
+        })
       });
 
-      const feedback = completion.choices[0]?.message?.content;
+      if (!response.ok) {
+        throw new Error('Failed to analyze recording');
+      }
+
+      const { feedback } = await response.json();
       if (!feedback) {
-        throw new Error('No feedback received from OpenAI');
+        throw new Error('No feedback received from server');
       }
 
       await recordingService.updateFeedback(recordingId, feedback);
@@ -169,7 +165,7 @@ const Recordings = () => {
   };
 
   if (!auth.currentUser) {
-    return <div>Please log in to access recordings.</div>;
+    return <div className="recordings-container">Please log in to access recordings.</div>;
   }
 
   return (
@@ -199,16 +195,22 @@ const Recordings = () => {
 
         <div className="recordings-list">
           <h3>Previous Recordings</h3>
-          {recordings.map((recording) => (
-            <RecordingItem
-              key={recording.id}
-              recording={recording}
-              audioUrl={audioUrls[recording.id]}
-              isAnalyzing={!!isAnalyzing[recording.id]}
-              onAnalyze={handleAnalyzeRecording}
-              onDelete={handleDeleteRecording}
-            />
-          ))}
+          {isLoading ? (
+            <div className="loading-message">Loading your recordings...</div>
+          ) : recordings.length === 0 ? (
+            <div className="no-recordings-message">No recordings yet. Start recording to see them here!</div>
+          ) : (
+            recordings.map((recording) => (
+              <RecordingItem
+                key={recording.id}
+                recording={recording}
+                audioUrl={audioUrls[recording.id]}
+                isAnalyzing={!!isAnalyzing[recording.id]}
+                onAnalyze={handleAnalyzeRecording}
+                onDelete={handleDeleteRecording}
+              />
+            ))
+          )}
         </div>
       </div>
     </div>
